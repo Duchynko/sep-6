@@ -1,0 +1,26 @@
+name: Upload Client To Azure
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - client/**
+
+jobs:
+  deploy: # job_id (& name)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        name: Checkout branch
+
+      - uses: azure/login@v1
+        name: Login to Azure
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/CLI@v1
+        name: Upload files to Azure
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az storage blob upload-batch -s client --account-name sep6client -d $web
