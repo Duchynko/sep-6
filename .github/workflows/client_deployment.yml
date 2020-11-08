@@ -23,4 +23,4 @@ jobs:
         with:
           azcliversion: 2.0.72
           inlineScript: |
-            az storage blob upload-batch -s client --account-name sep6client -d $web
+            az storage blob upload-batch -s client --account-name sep6client -d "$web"
