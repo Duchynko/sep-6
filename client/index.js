@@ -1,5 +1,5 @@
 const url =
-  "https://sep6-api.azurewebsites.net/api/httptrigger?name=Jakub&code=IDY/dvQwiI0TsVbIj8apqLaklMMmUSC1x7ux/sLAH51tHeAhFseGbw==";
+  "https://sep6-api.azurewebsites.net/api/httptrigger?name=Jakub";
 
 fetch(url)
   .then((data) => {
