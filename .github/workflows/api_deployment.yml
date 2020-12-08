@@ -9,8 +9,15 @@ on: [push]
 #   AZURE_FUNCTIONAPP_PUBLISH_PROFILE
 env:
   AZURE_FUNCTIONAPP_NAME: sep6api
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "."
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "sep6api"
   NODE_VERSION: "12.x"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - sep6api/**
 
 jobs:
   build-and-deploy:
