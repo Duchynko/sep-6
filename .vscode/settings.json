@@ -1,0 +1,9 @@
+{
+    "azureFunctions.deploySubpath": "sep6api",
+    "azureFunctions.postDeployTask": "npm install",
+    "azureFunctions.projectLanguage": "TypeScript",
+    "azureFunctions.projectRuntime": "~3",
+    "debug.internalConsoleOptions": "neverOpen",
+    "azureFunctions.preDeployTask": "npm prune",
+    "compile-hero.disable-compile-files-on-did-save-code": false
+}
