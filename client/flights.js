@@ -1,48 +1,108 @@
-const url = "http://localhost:7071/api/Flights";
+import ChartBuilder from "./chartBuilder.js";
 
-const flights = fetch(url)
+const URL = "http://localhost:7071/api/Flights";
+const ORIGINS = ["EWR", "LGA", "JFK"];
+const LABELS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+const totalFlightsChart = new ChartBuilder(
+  document.getElementById("totalFlights").getContext("2d"),
+  "bar"
+).setLabels(LABELS);
+
+const flightsByAirportChart = new ChartBuilder(
+  document.getElementById("flightsByAirport").getContext("2d"),
+  "bar"
+).setLabels(LABELS);
+
+const flightsByAirportStackedChart = new ChartBuilder(
+  document.getElementById("flightsByAirportStacked").getContext("2d"),
+  "bar"
+)
+  .setStacked(true)
+  .setLabels(LABELS);
+
+const percentageByAiportStackedChart = new ChartBuilder(
+  document.getElementById("flightsByAirportPercentage").getContext("2d"),
+  "bar"
+)
+  .setStacked(true)
+  .setPercentage(true)
+  .setLabels(LABELS);
+
+fetch(URL)
   .then((data) => {
     return data.json();
+  })
+  .then(({ data }) => {
+    const ewrFlights = __getFlightsPerMonthFromAirport(data, ORIGINS[0]);
+    const lgaFlights = __getFlightsPerMonthFromAirport(data, ORIGINS[1]);
+    const jfkFlights = __getFlightsPerMonthFromAirport(data, ORIGINS[2]);
+
+    totalFlightsChart
+      .addDataset("Total", __getTotalFlightsPerMonth(data))
+      .build();
+
+    flightsByAirportChart
+      .addDataset("JFK", jfkFlights)
+      .addDataset("EWR", ewrFlights)
+      .addDataset("LGA", lgaFlights)
+      .build();
+
+    flightsByAirportStackedChart
+      .addDataset("JFK", jfkFlights)
+      .addDataset("EWR", ewrFlights)
+      .addDataset("LGA", lgaFlights)
+      .build();
+
+    percentageByAiportStackedChart
+      .addDataset("JFK", jfkFlights)
+      .addDataset("EWR", ewrFlights)
+      .addDataset("LGA", lgaFlights)
+      .build();
   })
   .catch((err) => {
     console.log("Error:", err);
   });
 
+// function __datasetsToPercentage(...datasets, sums) {
+//   const areEqualSize = datasets.every((next, _, dataset) => {
+//     return dataset[0].length === next.length;
+//   });
 
+//   if (areEqualSize) {
+//     const n = datasets.length;
+//     for (let i = 0; i < datasets[0].length; i++) {
+//       for (let k = 0; k < datasets.length; k++) {
+//         datasets[k][i] = ((100.0 * datasets[k][i]) / sum).toFixed(2);
+//       }
+//     }
+//   }
+//   return datasets;
+// }
 
-var ctx = document.getElementById("myChart").getContext("2d");
-var myChart = new Chart(ctx, {
-  type: "pie",
-  data: {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    datasets: [
-      {
-        label: "# of Flights per airport",
-        data: flights,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    parsing: {
-      xAxisKey: 'origin',
-      // yAxisKey: 'nested.value'
-    }
-  },
-});
+function __getFlightsPerMonthFromAirport({ airports }, airport) {
+  const months = [];
+  Object.values(airports[airport]).forEach((month) => months.push(month));
+  return months;
+}
+
+function __getTotalFlightsPerMonth(data) {
+  const months = [];
+  Object.values(data.months).forEach((month) => {
+    months.push(month);
+  });
+  return months;
+}
