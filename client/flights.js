@@ -1,108 +1,137 @@
-import ChartBuilder from "./chartBuilder.js";
+import ChartBuilder from './chartBuilder.js';
 
-const URL = "https://sep6api.azurewebsites.net/api/Flights";
-const ORIGINS = ["EWR", "LGA", "JFK"];
-const LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+const URL = 'https://sep6api.azurewebsites.net/api/Flights';
+const origins = ['EWR', 'LGA', 'JFK'];
+// prettier-ignore
+const months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
 const totalFlightsChart = new ChartBuilder(
-  document.getElementById("totalFlights").getContext("2d"),
-  "bar"
-).setLabels(LABELS);
+  document.getElementById('totalFlights')
+)
+  .setLabels(months)
+  .toogleProgressBar();
 
 const flightsByAirportChart = new ChartBuilder(
-  document.getElementById("flightsByAirport").getContext("2d"),
-  "bar"
-).setLabels(LABELS);
+  document.getElementById('flightsByAirport')
+)
+  .setLabels(months)
+  .toogleProgressBar();
 
 const flightsByAirportStackedChart = new ChartBuilder(
-  document.getElementById("flightsByAirportStacked").getContext("2d"),
-  "bar"
+  document.getElementById('flightsByAirportStacked')
 )
-  .setStacked(true)
-  .setLabels(LABELS);
+  .setLabels(months)
+  .setStacked()
+  .toogleProgressBar();
 
 const percentageByAiportStackedChart = new ChartBuilder(
-  document.getElementById("flightsByAirportPercentage").getContext("2d"),
-  "bar"
+  document.getElementById('flightsByAirportPercentage')
 )
-  .setStacked(true)
-  .setPercentage(true)
-  .setLabels(LABELS);
+  .setStacked()
+  .setPercentage()
+  .setLabels(months)
+  .toogleProgressBar();
 
 fetch(URL)
-  .then((data) => {
-    return data.json();
+  .then((response) => {
+    return response.json();
   })
   .then(({ data }) => {
-    const ewrFlights = __getFlightsPerMonthFromAirport(data, ORIGINS[0]);
-    const lgaFlights = __getFlightsPerMonthFromAirport(data, ORIGINS[1]);
-    const jfkFlights = __getFlightsPerMonthFromAirport(data, ORIGINS[2]);
+    const totalFlights = __datasetToArrayOfValues(data.months);
+    const ewrFlights = __datasetToArrayOfValues(
+      data.airports[origins[0]]
+    );
+    const lgaFlights = __datasetToArrayOfValues(
+      data.airports[origins[1]]
+    );
+    const jfkFlights = __datasetToArrayOfValues(
+      data.airports[origins[2]]
+    );
 
     totalFlightsChart
-      .addDataset("Total", __getTotalFlightsPerMonth(data))
+      .addDataset('Total', totalFlights)
+      .toogleProgressBar()
       .build();
 
     flightsByAirportChart
-      .addDataset("JFK", jfkFlights)
-      .addDataset("EWR", ewrFlights)
-      .addDataset("LGA", lgaFlights)
+      .addDataset(origins[0], ewrFlights)
+      .addDataset(origins[1], lgaFlights)
+      .addDataset(origins[2], jfkFlights)
+      .toogleProgressBar()
       .build();
 
     flightsByAirportStackedChart
-      .addDataset("JFK", jfkFlights)
-      .addDataset("EWR", ewrFlights)
-      .addDataset("LGA", lgaFlights)
+      .addDataset(origins[0], ewrFlights)
+      .addDataset(origins[1], lgaFlights)
+      .addDataset(origins[2], jfkFlights)
+      .toogleProgressBar()
       .build();
 
     percentageByAiportStackedChart
-      .addDataset("JFK", jfkFlights)
-      .addDataset("EWR", ewrFlights)
-      .addDataset("LGA", lgaFlights)
+      .addDataset(
+        origins[0],
+        __datasetToPercentage(data.airports[origins[0]], data.months)
+      )
+      .addDataset(
+        origins[1],
+        __datasetToPercentage(data.airports[origins[1]], data.months)
+      )
+      .addDataset(
+        origins[2],
+        __datasetToPercentage(data.airports[origins[2]], data.months)
+      )
+      .toogleProgressBar()
       .build();
   })
   .catch((err) => {
-    console.log("Error:", err);
+    console.log('Error:', err);
   });
 
-// function __datasetsToPercentage(...datasets, sums) {
-//   const areEqualSize = datasets.every((next, _, dataset) => {
-//     return dataset[0].length === next.length;
-//   });
-
-//   if (areEqualSize) {
-//     const n = datasets.length;
-//     for (let i = 0; i < datasets[0].length; i++) {
-//       for (let k = 0; k < datasets.length; k++) {
-//         datasets[k][i] = ((100.0 * datasets[k][i]) / sum).toFixed(2);
-//       }
-//     }
-//   }
-//   return datasets;
-// }
-
-function __getFlightsPerMonthFromAirport({ airports }, airport) {
-  const months = [];
-  Object.values(airports[airport]).forEach((month) => months.push(month));
-  return months;
+/**
+ * Converts dictionary in form { label: value } to an array of percentage
+ * values. It calculates percentage by dividing {dataset[label]} with
+ * {totals[label]} and multiplying the result (ratio) by 100.
+ *
+ * @example
+ * ```
+ * const dataset = { 'a': 1, 'b': 2, 'c': 6 }
+ * const totals = { 'a': 10, 'b': 10, 'c': 12 }
+ * const result = __datasetToPercentage(dataset, totals);
+ * // result = [ 10, 20, 50 ]
+ * ```
+ *
+ * @param {object} dataset Dictionary in the form label:value
+ * @param {object} totals Dictionary in the form label:total
+ * @returns {Array<number>} Array of percentage values corresponding to {totals}
+ */
+function __datasetToPercentage(dataset, totals) {
+  const arrayDataset = [];
+  Object.keys(dataset).forEach((month) => {
+    const ratio = parseInt(dataset[month]) / parseInt(totals[month]);
+    const percentage = ratio * 100;
+    arrayDataset.push(percentage.toFixed(1));
+  });
+  return arrayDataset;
 }
 
-function __getTotalFlightsPerMonth(data) {
-  const months = [];
-  Object.values(data.months).forEach((month) => {
-    months.push(month);
-  });
-  return months;
+/**
+ * Converts dictionary in form { label: value } to an array of values
+ * 
+ * @example
+ * ```
+ * const dataset = { 'a': 1, 'b': 2, 'c': 6 }
+ * const result = __datasetToArrayOfValues(dataset);
+ * // result = [ 1, 2, 6 ]
+ * ```
+ *
+ * @param {object} dataset Dictionary in the form label:value
+ * @returns {Array<number>} Array of values from the {dataset} dictionary
+ */
+function __datasetToArrayOfValues(dataset) {
+  const arrayDataset = [];
+  Object.values(dataset).forEach((month) => arrayDataset.push(month));
+  return arrayDataset;
 }
