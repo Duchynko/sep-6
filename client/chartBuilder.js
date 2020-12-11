@@ -1,7 +1,8 @@
 export default class ChartBuilder {
-  constructor(context, type) {
+  constructor(canvas) {
+    this.canvas = canvas;
     this.config = {
-      type: type,
+      type: 'bar',
       data: {
         labels: [],
         datasets: [],
@@ -19,7 +20,11 @@ export default class ChartBuilder {
         },
       },
     };
-    this.chart = new Chart(context, this.config);
+    this.chart = new Chart(canvas.getContext('2d'), this.config);
+  }
+
+  setType(type) {
+    this.config.type = type;
   }
 
   setLabels(labels) {
@@ -44,14 +49,14 @@ export default class ChartBuilder {
       min: 0,
       max: 100,
       callback: function (value) {
-        return value + "%";
+        return value + '%';
       },
     };
     // Append % to a value in a tooltip
     this.config.options.tooltips = {
       callbacks: {
         label: function (item, _) {
-          return item.value + "%";
+          return item.value + '%';
         },
       },
     };
@@ -64,10 +69,23 @@ export default class ChartBuilder {
       data: data,
       label: label,
       backgroundColor: backgroundColors[n],
-      borderColor: "rgba(0, 0, 0, 0.2)",
+      borderColor: 'rgba(0, 0, 0, 0.2)',
       borderWidth: 1,
     };
     this.config.data.datasets.push(dataset);
+    return this;
+  }
+
+  toogleProgressBar() {
+    if (this.canvas.parentElement.lastElementChild.style.display !== 'none') {
+      this.canvas.parentElement.lastElementChild.style.cssText =
+        'display:none !important';
+    } else {
+      this.canvas.parentElement.lastElementChild.style.cssText =
+        'display:flex !important';
+      this.canvas.parentElement.lastElementChild.style.cssText =
+        'position:absolute; left:0; right:0; top:0; bottom:0;';
+    }
     return this;
   }
 
@@ -78,7 +96,7 @@ export default class ChartBuilder {
 }
 
 const backgroundColors = [
-  "rgba(255, 99, 132, 0.8)",
-  "rgba(54, 162, 235, 0.8)",
-  "rgba(255, 206, 86, 0.8)",
+  'rgba(255, 99, 132, 0.8)',
+  'rgba(54, 162, 235, 0.8)',
+  'rgba(255, 206, 86, 0.8)',
 ];
