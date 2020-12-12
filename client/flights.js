@@ -1,6 +1,8 @@
 import ChartBuilder from './chartBuilder.js';
 
-const URL = 'https://sep6api.azurewebsites.net/api/Flights';
+const URL = 'http://localhost:7071/api/Flights';
+// const URL = 'https://sep6api.azurewebsites.net/api/Flights';
+
 const origins = ['EWR', 'LGA', 'JFK'];
 // prettier-ignore
 const months = [
@@ -39,49 +41,43 @@ fetch(URL)
   .then((response) => {
     return response.json();
   })
-  .then(({ data }) => {
-    const totalFlights = __datasetToArrayOfValues(data.months);
-    const ewrFlights = __datasetToArrayOfValues(
-      data.airports[origins[0]]
-    );
-    const lgaFlights = __datasetToArrayOfValues(
-      data.airports[origins[1]]
-    );
-    const jfkFlights = __datasetToArrayOfValues(
-      data.airports[origins[2]]
-    );
+  .then(({ total, airports }) => {
+    const totalFlights = Object.values(total);
+    const ewrFlights = Object.values(airports['EWR'])
+    const lgaFlights = Object.values(airports['LGA']);
+    const jfkFlights = Object.values(airports['JFK']);
 
     totalFlightsChart
-      .addDataset('Total', totalFlights)
+      .addDataset('Total flights', totalFlights)
       .toggleProgressBar()
       .build();
 
     flightsByAirportChart
-      .addDataset(origins[0], ewrFlights)
-      .addDataset(origins[1], lgaFlights)
-      .addDataset(origins[2], jfkFlights)
+      .addDataset('EWR Flights', ewrFlights)
+      .addDataset('LGA Flights', lgaFlights)
+      .addDataset('JFK Flights', jfkFlights)
       .toggleProgressBar()
       .build();
 
     flightsByAirportStackedChart
-      .addDataset(origins[0], ewrFlights)
-      .addDataset(origins[1], lgaFlights)
-      .addDataset(origins[2], jfkFlights)
+      .addDataset('EWR Flights', ewrFlights)
+      .addDataset('LGA Flights', lgaFlights)
+      .addDataset('JFK Flights', jfkFlights)
       .toggleProgressBar()
       .build();
 
     percentageByAiportStackedChart
       .addDataset(
-        origins[0],
-        __datasetToPercentage(data.airports[origins[0]], data.months)
+        'EWR Flights',
+        __datasetToPercentage(airports[origins[0]], total)
       )
       .addDataset(
-        origins[1],
-        __datasetToPercentage(data.airports[origins[1]], data.months)
+        'LGA Flights',
+        __datasetToPercentage(airports[origins[1]], total)
       )
       .addDataset(
-        origins[2],
-        __datasetToPercentage(data.airports[origins[2]], data.months)
+        'JFK Flights',
+        __datasetToPercentage(airports[origins[2]], total)
       )
       .toggleProgressBar()
       .build();
@@ -114,24 +110,5 @@ function __datasetToPercentage(dataset, totals) {
     const percentage = ratio * 100;
     arrayDataset.push(percentage.toFixed(1));
   });
-  return arrayDataset;
-}
-
-/**
- * Converts dictionary in form { label: value } to an array of values
- * 
- * @example
- * ```
- * const dataset = { 'a': 1, 'b': 2, 'c': 6 }
- * const result = __datasetToArrayOfValues(dataset);
- * // result = [ 1, 2, 6 ]
- * ```
- *
- * @param {object} dataset Dictionary in the form label:value
- * @returns {Array<number>} Array of values from the {dataset} dictionary
- */
-function __datasetToArrayOfValues(dataset) {
-  const arrayDataset = [];
-  Object.values(dataset).forEach((month) => arrayDataset.push(month));
   return arrayDataset;
 }

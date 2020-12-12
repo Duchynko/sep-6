@@ -7,38 +7,34 @@ const httpTrigger: AzureFunction = async function (
 ): Promise<void> {
   context.log("HTTP trigger function processed a request.");
 
-  const pool = new Pool({
-    connectionString: process.env.PG_CONNECTION_STRING,
-  });
-
-  await pool
-    .connect()
-    .then(async (client) => {
-      const data = {
-        months: {},
-        airports: {},
-      };
-
-      data.months = await getDataPerMonth(client);
-      data.airports = await getDataPerAirport(client);
-
-      context.res = {
-        status: 200,
-        body: {
-          data,
-        },
-      };
-    })
-    .catch((err) => {
-      console.error("Unexpected error on idle client", err);
-      context.res = {
-        status: 500,
-        body: "Unexpected error when connecting to the database.",
-      };
+  try {
+    const pool = new Pool({
+      connectionString: process.env.PG_CONNECTION_STRING,
     });
+    const client = await pool.connect();
+
+    const data = {
+      total: {},
+      airports: {},
+    };
+
+    data.total = await getTotalFlights(client);
+    data.airports = await getFlightsPerAirport(client);
+
+    context.res = {
+      status: 200,
+      body: data
+    };
+  } catch (error) {
+    console.error("Unexpected error on idle client. Error:", error);
+    context.res = {
+      status: 500,
+      body: "Unexpected error when connecting to the database.",
+    };
+  }
 };
 
-async function getDataPerMonth(client: PoolClient) {
+async function getTotalFlights(client: PoolClient) {
   const data = {};
 
   for (const month in months) {
@@ -52,7 +48,7 @@ async function getDataPerMonth(client: PoolClient) {
   return data;
 }
 
-async function getDataPerAirport(client: PoolClient) {
+async function getFlightsPerAirport(client: PoolClient) {
   const data = {};
   for (const airport of airports) {
     for (const month in months) {
@@ -70,20 +66,10 @@ async function getDataPerAirport(client: PoolClient) {
 }
 
 const airports = ["JFK", "LGA", "EWR"];
-
+// prettier-ignore
 const months = {
-  january: "1",
-  february: "2",
-  march: "3",
-  april: "4",
-  may: "5",
-  june: "6",
-  july: "7",
-  august: "8",
-  september: "9",
-  october: "10",
-  november: "11",
-  december: "12",
+  january: "1", february: "2", march: "3", april: "4", may: "5", june: "6", july: "7", 
+  august: "8", september: "9", october: "10", november: "11", december: "12",
 };
 
 export default httpTrigger;
