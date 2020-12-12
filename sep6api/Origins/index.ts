@@ -53,7 +53,7 @@ async function getOriginMeanAirTime(client: PoolClient) {
             air_time != 'NA'
         GROUP BY origin`
     );
-    return data;
+    return data.rows;
 }
 
 async function getOriginMeanDepartureAndArrivalDelay(client: PoolClient) {
@@ -67,7 +67,7 @@ async function getOriginMeanDepartureAndArrivalDelay(client: PoolClient) {
             dep_delay != 'NA' AND arr_delay != 'NA'
         GROUP BY origin`
     );
-    return data;
+    return data.rows;
 }
 
 export default httpTrigger;
