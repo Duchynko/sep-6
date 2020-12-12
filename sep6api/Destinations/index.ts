@@ -9,9 +9,9 @@ const httpTrigger: AzureFunction = async function (
 
   try {
     const pool = new Pool({
-	  connectionString: process.env.PG_CONNECTION_STRING
+      connectionString: process.env.PG_CONNECTION_STRING,
     });
-	const client = await pool.connect();
+    const client = await pool.connect();
 
     const data = {
       airports: {},
@@ -19,7 +19,7 @@ const httpTrigger: AzureFunction = async function (
     };
 
     data.airports = await getDataPerAirport(client);
-	data.total = await getTotalData(client);
+    data.total = await getTotalData(client);
 
     context.res = {
       status: 200,
@@ -38,7 +38,7 @@ const httpTrigger: AzureFunction = async function (
 };
 
 async function getTotalData(client: PoolClient) {
-	const args = airports.map((a) => "'" + a + "'").join(', ')
+  const args = airports.map((a) => "'" + a + "'").join(", ");
   const response = await client.query(
     `SELECT COUNT(*), dest FROM flights WHERE origin IN (${args}) GROUP BY dest ORDER BY COUNT(dest) DESC LIMIT 10;`
   );
