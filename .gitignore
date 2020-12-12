@@ -9,6 +9,6 @@ node_modules/
 .serverless/
 
 # Editor specific config
-.vscode
+
 .DS_Store
 .idea
