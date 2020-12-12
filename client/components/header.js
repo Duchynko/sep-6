@@ -5,7 +5,7 @@ class Header extends HTMLElement {
   
     connectedCallback() {
       this.innerHTML = `
-      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div class="container-fluid">
           <a class="navbar-brand" href="index.html">
             <img src="public/control-tower.png" alt="" width="50" height="50" />
