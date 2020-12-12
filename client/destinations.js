@@ -5,19 +5,19 @@ const URL =
 
 const topDestinationsChart = new ChartBuilder(
   document.getElementById('topDestinations')
-).toogleProgressBar();
+).toggleProgressBar();
 
 const topDestinationsEwrChart = new ChartBuilder(
   document.getElementById('topDestinationsEwr')
-).toogleProgressBar();
+).toggleProgressBar();
 
 const topDestinationsLgaChart = new ChartBuilder(
   document.getElementById('topDestinationsLga')
-).toogleProgressBar();
+).toggleProgressBar();
 
 const topDestinationsJfkChart = new ChartBuilder(
   document.getElementById('topDestinationsJfk')
-).toogleProgressBar();
+).toggleProgressBar();
 
 fetch(URL)
   .then((response) => {
@@ -31,7 +31,7 @@ fetch(URL)
         'TOP 10 destinations',
         response.total.map((record) => record.count)
       )
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
 
     topDestinationsEwrChart
@@ -40,7 +40,7 @@ fetch(URL)
         'TOP 10 destinations',
         response.airports['EWR'].map((record) => record.count)
       )
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
 
     topDestinationsLgaChart
@@ -49,7 +49,7 @@ fetch(URL)
         'TOP 10 destinations',
         response.airports['LGA'].map((record) => record.count)
       )
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
 
     topDestinationsJfkChart
@@ -58,7 +58,7 @@ fetch(URL)
         'TOP 10 destinations',
         response.airports['JFK'].map((record) => record.count)
       )
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
   })
   .catch((err) => {

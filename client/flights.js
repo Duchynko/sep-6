@@ -12,20 +12,20 @@ const totalFlightsChart = new ChartBuilder(
   document.getElementById('totalFlights')
 )
   .setLabels(months)
-  .toogleProgressBar();
+  .toggleProgressBar();
 
 const flightsByAirportChart = new ChartBuilder(
   document.getElementById('flightsByAirport')
 )
   .setLabels(months)
-  .toogleProgressBar();
+  .toggleProgressBar();
 
 const flightsByAirportStackedChart = new ChartBuilder(
   document.getElementById('flightsByAirportStacked')
 )
   .setLabels(months)
   .setStacked()
-  .toogleProgressBar();
+  .toggleProgressBar();
 
 const percentageByAiportStackedChart = new ChartBuilder(
   document.getElementById('flightsByAirportPercentage')
@@ -33,7 +33,7 @@ const percentageByAiportStackedChart = new ChartBuilder(
   .setStacked()
   .setPercentage()
   .setLabels(months)
-  .toogleProgressBar();
+  .toggleProgressBar();
 
 fetch(URL)
   .then((response) => {
@@ -53,21 +53,21 @@ fetch(URL)
 
     totalFlightsChart
       .addDataset('Total', totalFlights)
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
 
     flightsByAirportChart
       .addDataset(origins[0], ewrFlights)
       .addDataset(origins[1], lgaFlights)
       .addDataset(origins[2], jfkFlights)
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
 
     flightsByAirportStackedChart
       .addDataset(origins[0], ewrFlights)
       .addDataset(origins[1], lgaFlights)
       .addDataset(origins[2], jfkFlights)
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
 
     percentageByAiportStackedChart
@@ -83,7 +83,7 @@ fetch(URL)
         origins[2],
         __datasetToPercentage(data.airports[origins[2]], data.months)
       )
-      .toogleProgressBar()
+      .toggleProgressBar()
       .build();
   })
   .catch((err) => {

@@ -76,7 +76,7 @@ export default class ChartBuilder {
     return this;
   }
 
-  toogleProgressBar() {
+  toggleProgressBar() {
     if (this.canvas.parentElement.lastElementChild.style.display !== 'none') {
       this.canvas.parentElement.lastElementChild.style.cssText =
         'display:none !important';
