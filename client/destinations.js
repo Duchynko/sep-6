@@ -22,36 +22,36 @@ fetch(URL)
   .then((response) => {
     return response.json();
   })
-  .then((response) => {
+  .then(({ total, airports }) => {
     topDestinationsChart
-      .setLabels(getValues(response.total, 'dest'))
-      .addDataset('TOP 10 destinations', getValues(response.total, 'count'))
+      .setLabels(getValues(total, 'dest'))
+      .addDataset('TOP 10 destinations', getValues(total, 'count'))
       .toggleProgressBar()
       .build();
 
     topDestinationsEwrChart
-      .setLabels(getValues(response.airports['EWR'], 'dest'))
+      .setLabels(getValues(airports['EWR'], 'dest'))
       .addDataset(
         'TOP 10 destinations',
-        getValues(response.airports['EWR'], 'count')
+        getValues(airports['EWR'], 'count')
       )
       .toggleProgressBar()
       .build();
 
     topDestinationsLgaChart
-      .setLabels(getValues(response.airports['LGA'], 'dest'))
+      .setLabels(getValues(airports['LGA'], 'dest'))
       .addDataset(
         'TOP 10 destinations',
-        getValues(response.airports['LGA'], 'count')
+        getValues(airports['LGA'], 'count')
       )
       .toggleProgressBar()
       .build();
 
     topDestinationsJfkChart
-      .setLabels(getValues(response.airports['JFK'], 'dest'))
+      .setLabels(getValues(airports['JFK'], 'dest'))
       .addDataset(
         'TOP 10 destinations',
-        getValues(response.airports['JFK'], 'count')
+        getValues(airports['JFK'], 'count')
       )
       .toggleProgressBar()
       .build();
