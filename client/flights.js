@@ -1,7 +1,7 @@
 import ChartBuilder from './chartBuilder.js';
 
-const URL = 'http://localhost:7071/api/Flights';
-// const URL = 'https://sep6api.azurewebsites.net/api/Flights';
+// const URL = 'http://localhost:7071/api/Flights';
+const URL = 'https://sep6api.azurewebsites.net/api/Flights';
 
 const origins = ['EWR', 'LGA', 'JFK'];
 // prettier-ignore
