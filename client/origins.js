@@ -1,7 +1,7 @@
 import ChartBuilder from './chartBuilder.js';
 
-// const URL = 'http://localhost:7071/api/Destinations';
-const URL = 'https://sep6api.azurewebsites.net/api/Origins';
+const URL = 'http://localhost:7071/api/Origins';
+// const URL = 'https://sep6api.azurewebsites.net/api/Origins';
 
 const originMeanAirTime = new ChartBuilder(
   document.getElementById('originMeanAirTime')

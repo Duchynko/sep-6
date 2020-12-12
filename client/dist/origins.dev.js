@@ -4,8 +4,8 @@ var _chartBuilder = _interopRequireDefault(require("./chartBuilder.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-// const URL = 'http://localhost:7071/api/Destinations';
-var URL = 'https://sep6api.azurewebsites.net/api/Origins';
+var URL = 'http://localhost:7071/api/Origins'; // const URL = 'https://sep6api.azurewebsites.net/api/Origins';
+
 var originMeanAirTime = new _chartBuilder["default"](document.getElementById('originMeanAirTime')).toggleProgressBar();
 var originMeanDepartureAndArrivalDelay = new _chartBuilder["default"](document.getElementById('originMeanDepartureAndArrivalDelay')).toggleProgressBar(); // const topDestinationsLgaChart = new ChartBuilder(
 //   document.getElementById('topDestinationsLga')
