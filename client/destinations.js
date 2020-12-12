@@ -1,7 +1,7 @@
 import ChartBuilder from './chartBuilder.js';
 
 const URL =
-  'https://sep6client.z6.web.core.windows.net/api/Destinations';
+  'https://sep6client.z6.web.core.windows.net/api/Destination';
 
 const topDestinationsChart = new ChartBuilder(
   document.getElementById('topDestinations')
