@@ -50,8 +50,8 @@ async function GetTemperature(client: PoolClient) {
   const data = {};
   for (const origin of origins) {
     data[origin] = (await client.query(
-      `SELECT temp FROM weather where weather.origin ='${origin}';`
-    ))
+      `SELECT (temp − 32) × 5/9 as celcius_temp FROM weather where weather.origin ='${origin}';`
+    )).rows
   }
   return data;
 }
