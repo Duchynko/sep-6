@@ -1,14 +1,9 @@
 import ChartBuilder from './chartBuilder.js';
 
-const URL = 'http://localhost:7071/api/Weather';
-//const URL = 'https://sep6api.azurewebsites.net/api/Weather';
+//const URL = 'http://localhost:7071/api/Weather';
+const URL = 'https://sep6api.azurewebsites.net/api/Weather';
 
 const origins = ['EWR', 'LGA', 'JFK'];
-
-const months = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-];
 
 const observationChart = new ChartBuilder(
   document.getElementById('observation')
