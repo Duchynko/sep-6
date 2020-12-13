@@ -16,10 +16,10 @@ fetch(URL)
     return response.json();
   })
   .then(({ observations, temperature }) => {
-    const totalFlights = Object.values(observations);
+    const obs = Object.values(observations);
 
     observationChart
-      .addDataset('observation', observations)
+      .addDataset('Observations', obs)
       .toggleProgressBar()
       .build();
   })
