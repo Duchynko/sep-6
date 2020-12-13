@@ -1,6 +1,5 @@
 {
   "name": "sep6api",
-  "version": "",
   "scripts": {
     "build": "tsc",
     "build:production": "npm run prestart && npm prune --production",
@@ -10,7 +9,6 @@
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
   },
-  "description": "",
   "devDependencies": {
     "@azure/functions": "^1.0.1-beta1",
     "@types/pg": "^7.14.7",
@@ -19,5 +17,10 @@
   },
   "dependencies": {
     "pg": "^8.5.1"
-  }
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
