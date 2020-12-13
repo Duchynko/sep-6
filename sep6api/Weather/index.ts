@@ -36,12 +36,17 @@ const httpTrigger: AzureFunction = async function (
 const origins = ["JFK", "LGA", "EWR"];
 
 async function getNumberofObsavations(client: PoolClient) {
-  const data = {};
+  const originCount = {};
   for (const origin of origins) {
-    data[origin] = await client.query(
-      `SELECT * FROM weather where weather.origin ='${origin}';`
+    let temp = await client.query(
+      `SELECT origin FROM weather where weather.origin ='${origin}';`
     )
+
+    originCount["origin"] = temp.rowCount;
   }
+
+  let data = {}
+  data["originCount"] = originCount;
   return data;
 }
 
