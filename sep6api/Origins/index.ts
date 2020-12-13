@@ -35,12 +35,6 @@ const httpTrigger: AzureFunction =
                 body: "Unexpected error when fetching Destinations data.",
             };
         }
-
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: data
-        };
-
     };
 
 async function getOriginMeanAirTime(client: PoolClient) {
