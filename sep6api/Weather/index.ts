@@ -38,11 +38,10 @@ const origins = ["JFK", "LGA", "EWR"];
 async function getNumberofObsavations(client: PoolClient) {
   const originCount = {};
   for (const origin of origins) {
-    let temp = await client.query(
-      `SELECT origin FROM weather where weather.origin ='${origin}';`
+    let originCount = {}
+    originCount[origin] = await client.query(
+      `SELECT * FROM weather where weather.origin ='${origin}';`
     )
-
-    originCount["origin"] = temp.rowCount;
   }
 
   let data = {}
