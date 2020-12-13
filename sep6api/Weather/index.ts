@@ -18,7 +18,7 @@ const httpTrigger: AzureFunction = async function (
       airports: {},
     };
 
-    data.total = await getNumberofObsavations(client);
+    data.total = await GetWeather(client);
 
     context.res = {
       status: 200,
@@ -35,19 +35,13 @@ const httpTrigger: AzureFunction = async function (
 
 const origins = ["JFK", "LGA", "EWR"];
 
-async function getNumberofObsavations(client: PoolClient) {
-  const originCount = {};
+async function GetWeather(client: PoolClient) {
+  const data = {};
   for (const origin of origins) {
-    let temp = {}
-    temp[origin] = await client.query(
-      `SELECT * FROM weather where weather.origin ='${origin}';`
+    data[origin] = await client.query(
+      `SELECT  * FROM weather where weather.origin ='${origin}';`
     )
-
-    originCount[origin] = temp;
   }
-
-  let data = {}
-  data["originCount"] = originCount;
   return data;
 }
 
