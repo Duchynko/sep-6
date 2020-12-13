@@ -25,6 +25,7 @@ export default class ChartBuilder {
 
   setType(type) {
     this.config.type = type;
+    return this;
   }
 
   setLabels(labels) {
