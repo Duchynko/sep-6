@@ -10,6 +10,7 @@ const httpTrigger: AzureFunction = async function (
   try {
     const pool = new Pool({
       connectionString: process.env.PG_CONNECTION_STRING,
+      max: 3
     });
     const client = await pool.connect();
 
@@ -20,6 +21,8 @@ const httpTrigger: AzureFunction = async function (
 
     data.total = await getTotalFlights(client);
     data.airports = await getFlightsPerAirport(client);
+
+    client.release()
 
     context.res = {
       status: 200,
