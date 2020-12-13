@@ -29,7 +29,7 @@ class Header extends HTMLElement {
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="flights.html"
+                <a class="nav-link active" aria-current="page" href="Flights"
                   >Flights</a
                 >
               </li>
@@ -40,10 +40,10 @@ class Header extends HTMLElement {
                 <a class="nav-link" href="weather.html">Weather</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="Origins.html">Origins</a>
+                <a class="nav-link" href="origins.html">Origins</a>
               </li>
               <li class="nav-item">
-              <a class="nav-link" href="Planes.html">Planes</a>
+              <a class="nav-link" href="planes.html">Planes</a>
             </li>
             </ul>
           </div>
