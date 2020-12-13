@@ -1,0 +1,11 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "FUNCTIONS_WORKER_RUNTIME": "node",
+        "AzureWebJobsStorage": "",
+        "PG_CONNECTION_STRING": "postgresql://sep6admin@sep6flightdata:WJo1azRCGEB1@sep6flightdata.postgres.database.azure.com:5432/postgres"
+    },
+    "Host": {
+        "CORS": "*"
+    }
+}
