@@ -1,84 +1,30 @@
 import ChartBuilder from './chartBuilder.js';
 
-// const URL = 'http://localhost:7071/api/Weather';
-const URL = 'https://sep6api.azurewebsites.net/api/Weather';
+const URL = 'http://localhost:7071/api/Weather';
+//const URL = 'https://sep6api.azurewebsites.net/api/Weather';
 
 const origins = ['EWR', 'LGA', 'JFK'];
-// prettier-ignore
+
 const months = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
-const totalFlightsChart = new ChartBuilder(
-  document.getElementById('totalFlights')
+const observationChart = new ChartBuilder(
+  document.getElementById('observation')
 )
-  .setLabels(months)
-  .toggleProgressBar();
-
-const flightsByAirportChart = new ChartBuilder(
-  document.getElementById('flightsByAirport')
-)
-  .setLabels(months)
-  .toggleProgressBar();
-
-const flightsByAirportStackedChart = new ChartBuilder(
-  document.getElementById('flightsByAirportStacked')
-)
-  .setLabels(months)
-  .setStacked()
-  .toggleProgressBar();
-
-const percentageByAiportStackedChart = new ChartBuilder(
-  document.getElementById('flightsByAirportPercentage')
-)
-  .setStacked()
-  .setPercentage()
-  .setLabels(months)
+  .setLabels(origins)
   .toggleProgressBar();
 
 fetch(URL)
   .then((response) => {
     return response.json();
   })
-  .then(({ total, airports }) => {
-    const totalFlights = Object.values(total);
-    const ewrFlights = Object.values(airports['EWR'])
-    const lgaFlights = Object.values(airports['LGA']);
-    const jfkFlights = Object.values(airports['JFK']);
+  .then(({ observations, temperature }) => {
+    const totalFlights = Object.values(observations);
 
-    totalFlightsChart
-      .addDataset('Total flights', totalFlights)
-      .toggleProgressBar()
-      .build();
-
-    flightsByAirportChart
-      .addDataset('EWR Flights', ewrFlights)
-      .addDataset('LGA Flights', lgaFlights)
-      .addDataset('JFK Flights', jfkFlights)
-      .toggleProgressBar()
-      .build();
-
-    flightsByAirportStackedChart
-      .addDataset('EWR Flights', ewrFlights)
-      .addDataset('LGA Flights', lgaFlights)
-      .addDataset('JFK Flights', jfkFlights)
-      .toggleProgressBar()
-      .build();
-
-    percentageByAiportStackedChart
-      .addDataset(
-        'EWR Flights',
-        __datasetToPercentage(airports[origins[0]], total)
-      )
-      .addDataset(
-        'LGA Flights',
-        __datasetToPercentage(airports[origins[1]], total)
-      )
-      .addDataset(
-        'JFK Flights',
-        __datasetToPercentage(airports[origins[2]], total)
-      )
+    observationChart
+      .addDataset('observation', observations)
       .toggleProgressBar()
       .build();
   })
