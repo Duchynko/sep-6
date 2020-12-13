@@ -11,6 +11,7 @@ const meanDepartureAndArrivalDelay = new ChartBuilder(
   document.getElementById('originMeanDepartureAndArrivalDelay')
 ).toggleProgressBar();
 
+
 fetch(URL)
   .then((response) => {
     return response.json();
