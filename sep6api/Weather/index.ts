@@ -38,9 +38,9 @@ const origins = ["JFK", "LGA", "EWR"];
 async function GetWeather(client: PoolClient) {
   const data = {};
   for (const origin of origins) {
-    data[origin] = await client.query(
+    data[origin] = (await client.query(
       `SELECT  * FROM weather where weather.origin ='${origin}';`
-    )
+    )).rowCount
   }
   return data;
 }
