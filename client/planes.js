@@ -1,7 +1,7 @@
 import ChartBuilder from './chartBuilder.js';
 
-const URL = 'http://localhost:7071/api/Planes';
-// const URL = 'https://sep6api.azurewebsites.net/api/Planes';
+// const URL = 'http://localhost:7071/api/Planes';
+const URL = 'https://sep6api.azurewebsites.net/api/Planes';
 
 const manufaturers200PlusPlanes = new ChartBuilder(
     document.getElementById('manufaturers200PlusPlanes')
@@ -22,6 +22,7 @@ fetch(URL)
     .then(({ manufaturers_200PlusPlanes, planes_AirbusModel, flights_Manufacturers200PlusPlanes }) => {
         manufaturers200PlusPlanes
             .setLabels(getValues(manufaturers_200PlusPlanes, 'manufacturer'))
+            .addDataset('planes Airbus Model', getValues(planes_AirbusModel, 'number_of_planes'))
             .toggleProgressBar()
             .build();
 
