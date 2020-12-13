@@ -14,11 +14,12 @@ const httpTrigger: AzureFunction = async function (
     const client = await pool.connect();
 
     const data = {
-      total: {},
-      airports: {},
+      observations: {},
+      temperature: {},
     };
 
-    data.total = await GetNumberOfObservations(client);
+    data.observations = await GetNumberOfObservations(client);
+    data.temperature = await GetTemperature(client);
 
     context.res = {
       status: 200,
@@ -41,6 +42,16 @@ async function GetNumberOfObservations(client: PoolClient) {
     data[origin] = (await client.query(
       `SELECT  * FROM weather where weather.origin ='${origin}';`
     )).rowCount
+  }
+  return data;
+}
+
+async function GetTemperature(client: PoolClient) {
+  const data = {};
+  for (const origin of origins) {
+    data[origin] = (await client.query(
+      `SELECT temp FROM weather where weather.origin ='${origin}';`
+    ))
   }
   return data;
 }
