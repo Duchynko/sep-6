@@ -29,7 +29,7 @@ class Header extends HTMLElement {
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="Flights"
+                <a class="nav-link active" aria-current="page" href="flights.html"
                   >Flights</a
                 >
               </li>
