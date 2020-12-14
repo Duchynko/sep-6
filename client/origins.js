@@ -1,13 +1,13 @@
 import ChartBuilder from './chartBuilder.js';
 
-// const URL = 'http://localhost:7071/api/Origins';
-const URL = 'https://sep6api.azurewebsites.net/api/Origins';
+const URL = 'http://localhost:7071/api/Origins';
+// const URL = 'https://sep6api.azurewebsites.net/api/Origins';
 
-const meanAirTime = new ChartBuilder(
+const meanAirTimeChart = new ChartBuilder(
   document.getElementById('originMeanAirTime')
 ).toggleProgressBar();
 
-const meanDepartureAndArrivalDelay = new ChartBuilder(
+const meanDepartureAndArrivalDelayChart = new ChartBuilder(
   document.getElementById('originMeanDepartureAndArrivalDelay')
 ).toggleProgressBar();
 
@@ -17,13 +17,13 @@ fetch(URL)
     return response.json();
   })
   .then(({ originMeanAirTime, originMeanDepartureAndArrivalDelay }) => {
-    meanAirTime
+    meanAirTimeChart
       .setLabels(getValues(originMeanAirTime, 'origin'))
       .addDataset('Mean Air Time', getValues(originMeanAirTime, 'MEAN AIR TIME'))
       .toggleProgressBar()
       .build();
 
-    meanDepartureAndArrivalDelay
+    meanDepartureAndArrivalDelayChart
       .setLabels(getValues(originMeanDepartureAndArrivalDelay, 'origin'))
       .addDataset('Mean Departure Delay', getValues(originMeanDepartureAndArrivalDelay, 'MEAN DEP DELAY'))
       .addDataset('Mean Arrival Delay', getValues(originMeanDepartureAndArrivalDelay, 'MEAN ARR DELAY'))
