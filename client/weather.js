@@ -1,48 +1,40 @@
 import ChartBuilder from './chartBuilder.js';
 
-//const URL = 'http://localhost:7071/api/Weather';
-const URL = 'https://sep6api.azurewebsites.net/api/Weather';
+const URL = 'http://localhost:7071/api/Weather';
+//const URL = 'https://sep6api.azurewebsites.net/api/Weather';
 
 const origins = ['EWR', 'LGA', 'JFK'];
 
 const observationChart = new ChartBuilder(
   document.getElementById('observation')
 )
-  .setLabels(origins)
-  .toggleProgressBar();
+.toggleProgressBar();
 
-  const observationChart = new ChartBuilder(
-    document.getElementById('observation')
-  )
-    .setLabels(origins)
-    .toggleProgressBar();
-
-    const temperatureChart = new ChartBuilder(
-      document.getElementById('temperature')
-    )
-    .toggleProgressBar();
+const temperatureChart = new ChartBuilder(
+  document.getElementById('temperature')
+)
+.setType("line")
+.toggleProgressBar();
 
 fetch(URL)
   .then((response) => {
     return response.json();
   })
   .then(({ observations, temperature }) => {
-    const obs = Object.values(observations);
     const temp = Object.values(temperature);
 
     observationChart
-      .addDataset('EWR', obs['EWR'])
-      .addDataset('LGA', obs['LGA'])
-      .addDataset('JFK', obs['JFK'])
+      .addDataset('EWR', [observations['EWR']])
+      .addDataset('LGA', [observations['LGA']])
+      .addDataset('JFK', [observations['JFK']])
       .toggleProgressBar()
       .build();
 
-      temperatureChart
-      .setType("line")
-      .setLabels(temp['time'])
-      .addDataset('EWR', temp['EWR'])
-      .addDataset('LGA', temp['LGA'])
-      .addDataset('JFK', temp['JFK'])
+    temperatureChart
+      .addDataset('EWR', temp[0])
+      .addDataset('LGA', temp[1])
+      .addDataset('JFK', temp[2])
+      .setLabels(temp[3])
       .toggleProgressBar()
       .build();
 
