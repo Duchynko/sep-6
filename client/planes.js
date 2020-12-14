@@ -29,13 +29,13 @@ fetch(URL)
 
         airbusModelPlanesChart
             .setLabels(getValues(airbusModelPlanes, 'model'))
-            .addDataset('planes Airbus Model', getValues(airbusModelPlanes, 'number_of_planes'))
+            .addDataset('Planes', getValues(airbusModelPlanes, 'number_of_planes'))
             .toggleProgressBar()
             .build();
 
         flightsManufacturers200PlusPlanesChart
             .setLabels(getValues(flightsManufacturers200PlusPlanes, 'manufacturer'))
-            .addDataset('flights Manufacturers 200+ Planes', getValues(flightsManufacturers200PlusPlanes, 'flights'))
+            .addDataset('Flights', getValues(flightsManufacturers200PlusPlanes, 'flights'))
             .toggleProgressBar()
             .build();
     })
