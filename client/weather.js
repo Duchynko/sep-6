@@ -39,10 +39,10 @@ fetch(URL)
 
       temperatureChart
       .setType("line")
-      .setLabels(temp['EWR'].time_hour)
-      .addDataset('EWR', temp['EWR'].celcius_temp)
-      .addDataset('LGA', temp['LGA'].celcius_temp)
-      .addDataset('JFK', temp['JFK'].celcius_temp)
+      .setLabels(temp['time'])
+      .addDataset('EWR', temp['EWR'])
+      .addDataset('LGA', temp['LGA'])
+      .addDataset('JFK', temp['JFK'])
       .toggleProgressBar()
       .build();
 
