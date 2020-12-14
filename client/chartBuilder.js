@@ -1,5 +1,6 @@
 export default class ChartBuilder {
   constructor(canvas) {
+    this.chart = undefined;
     this.canvas = canvas;
     this.config = {
       type: 'bar',
@@ -9,9 +10,14 @@ export default class ChartBuilder {
       },
       options: {
         scales: {
-          xAxes: [{}],
+          xAxes: [
+            {
+              gridLines: { display: false },
+            },
+          ],
           yAxes: [
             {
+              gridLines: { drawBorder: false },
               ticks: {
                 beginAtZero: true,
               },
@@ -20,10 +26,12 @@ export default class ChartBuilder {
         },
       },
     };
-    this.chart = new Chart(canvas.getContext('2d'), this.config);
   }
 
   setType(type) {
+    if (type === 'pie' || type === 'doughnut') {
+      this.config.options.scales = {};
+    }
     this.config.type = type;
     return this;
   }
@@ -91,7 +99,7 @@ export default class ChartBuilder {
   }
 
   build() {
-    this.chart.update();
+    this.chart = new Chart(this.canvas.getContext('2d'), this.config);
     return this.chart;
   }
 }

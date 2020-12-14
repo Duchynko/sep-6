@@ -21,9 +21,11 @@ const httpTrigger: AzureFunction = async function (
     data.observations = await GetNumberOfObservations(client);
     data.temperature = await GetTemperature(client);
 
+    client.release()
+
     context.res = {
       status: 200,
-      body: data
+      body: data,
     };
   } catch (error) {
     console.error("Unexpected error on idle client. Error:", error);
@@ -39,9 +41,11 @@ const origins = ["JFK", "LGA", "EWR"];
 async function GetNumberOfObservations(client: PoolClient) {
   const data = {};
   for (const origin of origins) {
-    data[origin] = (await client.query(
-      `SELECT  * FROM weather where weather.origin ='${origin}';`
-    )).rowCount
+    data[origin] = (
+      await client.query(
+        `SELECT  * FROM weather where weather.origin ='${origin}';`
+      )
+    ).rowCount;
   }
   return data;
 }
@@ -49,9 +53,11 @@ async function GetNumberOfObservations(client: PoolClient) {
 async function GetTemperature(client: PoolClient) {
   const data = {};
   for (const origin of origins) {
-    data[origin] = (await client.query(
-      `SELECT time_hour, ((temp-32)*5/9) as celcius_temp FROM weather where weather.origin ='${origin}';`
-    )).rows
+    data[origin] = (
+      await client.query(
+        `SELECT time_hour, ((temp-32)*5/9) as celcius_temp FROM weather where weather.origin ='${origin}';`
+      )
+    ).rows;
   }
   return data;
 }

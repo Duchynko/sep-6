@@ -37,7 +37,7 @@ class Header extends HTMLElement {
                 <a class="nav-link" href="destinations.html">Destinations</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Weather</a>
+                <a class="nav-link" href="weather.html">Weather</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="origins.html">Origins</a>
