@@ -54,7 +54,7 @@ fetch(URL)
 
     JFKLastTemp.append(
       "Temperature at JFK: " +
-      "Latest reading " + temp[2].slice(-1)
+      "Latest reading " + [parseFloat(temp[2].slice(-1)[0]).toFixed(2)]
     );
 
     JFKmean
