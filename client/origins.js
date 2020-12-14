@@ -18,14 +18,14 @@ fetch(URL)
   .then(({ originMeanAirTime, originMeanDepartureAndArrivalDelay }) => {
     meanAirTimeChart
       .setLabels(getValues(originMeanAirTime, 'origin'))
-      .addDataset('Mean Air Time', getValues(originMeanAirTime, 'MEAN AIR TIME'))
+      .addDataset('Minutes', getValues(originMeanAirTime, 'MEAN AIR TIME'))
       .toggleProgressBar()
       .build();
 
     meanDepartureAndArrivalDelayChart
       .setLabels(getValues(originMeanDepartureAndArrivalDelay, 'origin'))
-      .addDataset('Mean Departure Delay', getValues(originMeanDepartureAndArrivalDelay, 'MEAN DEP DELAY'))
-      .addDataset('Mean Arrival Delay', getValues(originMeanDepartureAndArrivalDelay, 'MEAN ARR DELAY'))
+      .addDataset('Minutes Departure', getValues(originMeanDepartureAndArrivalDelay, 'MEAN DEP DELAY'))
+      .addDataset('Minutes Arrival', getValues(originMeanDepartureAndArrivalDelay, 'MEAN ARR DELAY'))
       .toggleProgressBar()
       .build();
   })
