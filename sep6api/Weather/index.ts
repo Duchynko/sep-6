@@ -52,13 +52,34 @@ async function GetNumberOfObservations(client: PoolClient) {
 
 async function GetTemperature(client: PoolClient) {
   const data = {};
+
   for (const origin of origins) {
     data[origin] = (
       await client.query(
-        `SELECT time_hour, ((temp-32)*5/9) as celcius_temp FROM weather where weather.origin ='${origin}';`
+        `SELECT ((temp-32)*5/9) as celcius_temp FROM weather where weather.origin ='${origin}';`
       )
     ).rows;
+
+    let temp = [];
+    for (const vlaue of data[origin]) {
+      temp.push(vlaue.celcius_temp);
+    }
+
+    data[origin] = temp;
   }
+
+  data["time"] = (await client.query(
+    `SELECT DISTINCT time_hour FROM weather;`
+    )
+  ).rows;
+
+  let temp = []
+  for (const vlaue of data["time"]) {
+    temp.push(vlaue.time_hour);
+  }
+
+  data["time"] = temp;
+
   return data;
 }
 
