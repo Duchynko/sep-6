@@ -8,13 +8,15 @@ const origins = ['EWR', 'LGA', 'JFK'];
 const observationChart = new ChartBuilder(
   document.getElementById('observation')
 )
-.toggleProgressBar();
+  .toggleProgressBar();
 
 const temperatureChart = new ChartBuilder(
   document.getElementById('temperature')
 )
-.setType("line")
-.toggleProgressBar();
+  .setType("line")
+  .toggleProgressBar();
+
+const JFKLastTemp = document.getElementById('JFKtemp');
 
 fetch(URL)
   .then((response) => {
@@ -37,6 +39,11 @@ fetch(URL)
       .setLabels(temp[3])
       .toggleProgressBar()
       .build();
+
+      JFKLastTemp.append(
+        "Temperature at JFK: "+
+        "Latest reading " + temp[2].slice(-1)
+      );
 
   })
   .catch((err) => {
