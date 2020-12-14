@@ -20,7 +20,6 @@ const observationChart = new ChartBuilder(
     const temperatureChart = new ChartBuilder(
       document.getElementById('temperature')
     )
-    .setType("line")
     .setLabels(origins)
     .toggleProgressBar();
 
@@ -40,6 +39,7 @@ fetch(URL)
       .build();
 
       temperatureChart
+      .setType("line")
       .addDataset('EWR', temp['EWR'])
       .addDataset('LGA', temp['LGA'])
       .addDataset('JFK', temp['JFK'])
