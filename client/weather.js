@@ -1,4 +1,4 @@
-import ChartBuilder from './chartBuilder.js';
+import ChartBuilder, { backgroundColors } from './chartBuilder.js';
 
 //const URL = 'http://localhost:7071/api/Weather';
 const URL = 'https://sep6api.azurewebsites.net/api/Weather';
@@ -8,26 +8,23 @@ const origins = ['EWR', 'LGA', 'JFK'];
 const observationChart = new ChartBuilder(
   document.getElementById('observation')
 )
-  .toggleProgressBar();
-
-const temperatureChart = new ChartBuilder(
-  document.getElementById('temperature')
-)
-  .setType("line")
+  .setType('doughnut')
+  .setLabels(origins)
   .toggleProgressBar();
 
 const meanTemprature = new ChartBuilder(
   document.getElementById('meanTemprature')
 )
-  .setType("line")
+  .setLabels([''])
+  .setXAxesLabel('date')
+  .setYAxesLabel('°C')
+  .setType('line')
   .toggleProgressBar();
 
-const JFKLastTemp = document.getElementById('JFKtemp');
-
-const JFKmean = new ChartBuilder(
-  document.getElementById('JFKmean')
-)
-  .setType("line")
+const JFKmean = new ChartBuilder(document.getElementById('JFKmean'))
+  .setXAxesLabel('date')
+  .setYAxesLabel('°C')
+  .setType('line')
   .toggleProgressBar();
 
 fetch(URL)
@@ -38,36 +35,30 @@ fetch(URL)
     const temp = Object.values(temperature);
 
     observationChart
-      .addDataset('EWR', [observations['EWR']])
-      .addDataset('LGA', [observations['LGA']])
-      .addDataset('JFK', [observations['JFK']])
+      .addDataset(
+        'Observations',
+        [observations['EWR'], observations['LGA'], observations['JFK']],
+        { backgroundColor: backgroundColors.slice(4, 7) }
+      )
       .toggleProgressBar()
       .build();
 
-    temperatureChart
-      .addDataset('EWR', temp[0])
-      .addDataset('LGA', temp[1])
-      .addDataset('JFK', temp[2])
-      .setLabels(ReduceToDate(temp[3]))
-      .toggleProgressBar()
-      .build();
-
-    JFKLastTemp.append(
-      "Temperature at JFK: " +
-      "Latest reading " + [parseFloat(temp[2].slice(-1)[0]).toFixed(2)]
-    );
-
-    JFKmean
-      .addDataset('JFK', calculateMeanTemprature(temp[2]))
-      .setLabels(ReduceToDate(temp[3]))
+    JFKmean.addDataset('JFK 2013', calculateMeanTemprature(temp[2]))
+      .setLabels(reduceToDate(temp[3]))
       .toggleProgressBar()
       .build();
 
     meanTemprature
-      .addDataset('EWR', calculateMeanTemprature(temp[0]))
-      .addDataset('LGA', calculateMeanTemprature(temp[1]))
-      .addDataset('JFK', calculateMeanTemprature(temp[2]))
-      .setLabels(ReduceToDate(temp[3]))
+      .addDataset('EWR 2013', calculateMeanTemprature(temp[0]), {
+        backgroundColor: backgroundColors[0],
+      })
+      .addDataset('LGA 2013', calculateMeanTemprature(temp[1]), {
+        backgroundColor: backgroundColors[5],
+      })
+      .addDataset('JFK 2013', calculateMeanTemprature(temp[2]), {
+        backgroundColor: backgroundColors[9],
+      })
+      .setLabels(reduceToDate(temp[3]))
       .toggleProgressBar()
       .build();
   })
@@ -80,7 +71,7 @@ function calculateMeanTemprature(data) {
   let holder = 0;
   let means = [];
 
-  data.forEach(temprature => {
+  data.forEach((temprature) => {
     holder += parseFloat(temprature);
     i++;
     if (i >= 24) {
@@ -93,13 +84,13 @@ function calculateMeanTemprature(data) {
   return means;
 }
 
-function ReduceToDate(data) {
+function reduceToDate(data) {
   let dates = [];
-  data = data.filter(function (value, index, Arr) {
+  data = data.filter(function (_, index, __) {
     return index % 24 == 0;
   });
 
-  data.forEach(value => {
+  data.forEach((value) => {
     dates.push(value.split('T')[0]);
   });
 

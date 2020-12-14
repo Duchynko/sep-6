@@ -14,27 +14,35 @@ const totalFlightsChart = new ChartBuilder(
   document.getElementById('totalFlights')
 )
   .setLabels(months)
+  .setXAxesLabel('months')
+  .setYAxesLabel('# of flights')
   .toggleProgressBar();
 
 const flightsByAirportChart = new ChartBuilder(
   document.getElementById('flightsByAirport')
 )
   .setLabels(months)
+  .setXAxesLabel('months')
+  .setYAxesLabel('# of flights')
   .toggleProgressBar();
 
 const flightsByAirportStackedChart = new ChartBuilder(
   document.getElementById('flightsByAirportStacked')
 )
   .setLabels(months)
+  .setXAxesLabel('months')
+  .setYAxesLabel('# of flights')
   .setStacked()
   .toggleProgressBar();
 
 const percentageByAiportStackedChart = new ChartBuilder(
   document.getElementById('flightsByAirportPercentage')
 )
+  .setLabels(months)
+  .setXAxesLabel('months')
+  .setYAxesLabel('proportion')
   .setStacked()
   .setPercentage()
-  .setLabels(months)
   .toggleProgressBar();
 
 fetch(URL)
@@ -48,35 +56,35 @@ fetch(URL)
     const jfkFlights = Object.values(airports['JFK']);
 
     totalFlightsChart
-      .addDataset('Total flights', totalFlights)
+      .addDataset('Flights 2013', totalFlights)
       .toggleProgressBar()
       .build();
 
     flightsByAirportChart
-      .addDataset('EWR Flights', ewrFlights)
-      .addDataset('LGA Flights', lgaFlights)
-      .addDataset('JFK Flights', jfkFlights)
+      .addDataset('EWR Flights 2013', ewrFlights)
+      .addDataset('LGA Flights 2013', lgaFlights)
+      .addDataset('JFK Flights 2013', jfkFlights)
       .toggleProgressBar()
       .build();
 
     flightsByAirportStackedChart
-      .addDataset('EWR Flights', ewrFlights)
-      .addDataset('LGA Flights', lgaFlights)
-      .addDataset('JFK Flights', jfkFlights)
+      .addDataset('EWR Flights 2013', ewrFlights)
+      .addDataset('LGA Flights 2013', lgaFlights)
+      .addDataset('JFK Flights 2013', jfkFlights)
       .toggleProgressBar()
       .build();
 
     percentageByAiportStackedChart
       .addDataset(
-        'EWR Flights',
+        'EWR Flights 2013',
         __datasetToPercentage(airports[origins[0]], total)
       )
       .addDataset(
-        'LGA Flights',
+        'LGA Flights 2013',
         __datasetToPercentage(airports[origins[1]], total)
       )
       .addDataset(
-        'JFK Flights',
+        'JFK Flights 2013',
         __datasetToPercentage(airports[origins[2]], total)
       )
       .toggleProgressBar()

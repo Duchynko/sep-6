@@ -13,11 +13,19 @@ export default class ChartBuilder {
           xAxes: [
             {
               gridLines: { display: false },
+              scaleLabel: {
+                display: false,
+                labelString: '',
+              },
             },
           ],
           yAxes: [
             {
               gridLines: { drawBorder: false },
+              scaleLabel: {
+                display: false,
+                labelString: '',
+              },
               ticks: {
                 beginAtZero: true,
               },
@@ -52,6 +60,18 @@ export default class ChartBuilder {
     return this;
   }
 
+  setXAxesLabel(label) {
+    this.config.options.scales.xAxes[0].scaleLabel.display = true;
+    this.config.options.scales.xAxes[0].scaleLabel.labelString = label;
+    return this;
+  }
+
+  setYAxesLabel(label) {
+    this.config.options.scales.yAxes[0].scaleLabel.display = true;
+    this.config.options.scales.yAxes[0].scaleLabel.labelString = label;
+    return this;
+  }
+
   setPercentage() {
     // Append % to ticks values in the y-axes
     this.config.options.scales.yAxes[0].ticks = {
@@ -72,12 +92,16 @@ export default class ChartBuilder {
     return this;
   }
 
-  addDataset(label, data) {
+  addDataset(
+    label,
+    data,
+    { backgroundColor } = { backgroundColor: undefined }
+  ) {
     const n = this.config.data.datasets.length;
     const dataset = {
       data: data,
       label: label,
-      backgroundColor: backgroundColors[n],
+      backgroundColor: backgroundColor ? backgroundColor : backgroundColors[n],
       borderColor: 'rgba(0, 0, 0, 0.2)',
       borderWidth: 1,
     };
@@ -104,8 +128,16 @@ export default class ChartBuilder {
   }
 }
 
-const backgroundColors = [
-  'rgba(255, 99, 132, 0.8)',
-  'rgba(54, 162, 235, 0.8)',
-  'rgba(255, 206, 86, 0.8)',
+export const backgroundColors = [
+  '#00876c',
+  '#439a6d',
+  '#6dad6d',
+  '#98bf6e',
+  '#c4cf72',
+  '#f1dd7c',
+  '#f1bf64',
+  '#f0a154',
+  '#eb814c',
+  '#e2604c',
+  '#d43d51',
 ];

@@ -1,23 +1,35 @@
-import ChartBuilder from './chartBuilder.js';
+import ChartBuilder, { backgroundColors } from './chartBuilder.js';
 
 // const URL = 'http://localhost:7071/api/Destinations';
 const URL = 'https://sep6api.azurewebsites.net/api/Destinations';
 
 const topDestinationsChart = new ChartBuilder(
   document.getElementById('topDestinations')
-).toggleProgressBar();
+)
+  .setXAxesLabel('airport')
+  .setYAxesLabel('# of flights')
+  .toggleProgressBar();
 
 const topDestinationsEwrChart = new ChartBuilder(
   document.getElementById('topDestinationsEwr')
-).toggleProgressBar();
+)
+  .setXAxesLabel('airport')
+  .setYAxesLabel('# of flights')
+  .toggleProgressBar();
 
 const topDestinationsLgaChart = new ChartBuilder(
   document.getElementById('topDestinationsLga')
-).toggleProgressBar();
+)
+  .setXAxesLabel('airport')
+  .setYAxesLabel('# of flights')
+  .toggleProgressBar();
 
 const topDestinationsJfkChart = new ChartBuilder(
   document.getElementById('topDestinationsJfk')
-).toggleProgressBar();
+)
+  .setXAxesLabel('airport')
+  .setYAxesLabel('# of flights')
+  .toggleProgressBar();
 
 fetch(URL)
   .then((response) => {
@@ -26,25 +38,33 @@ fetch(URL)
   .then(({ total, airports }) => {
     topDestinationsChart
       .setLabels(getValues(total, 'dest'))
-      .addDataset('TOP 10', getValues(total, 'count'))
+      .addDataset('Flights 2013', getValues(total, 'count'), {
+        backgroundColor: backgroundColors,
+      })
       .toggleProgressBar()
       .build();
 
     topDestinationsEwrChart
       .setLabels(getValues(airports['EWR'], 'dest'))
-      .addDataset('TOP 10', getValues(airports['EWR'], 'count'))
+      .addDataset('EWR Flights 2013', getValues(airports['EWR'], 'count'), {
+        backgroundColor: backgroundColors,
+      })
       .toggleProgressBar()
       .build();
 
     topDestinationsLgaChart
       .setLabels(getValues(airports['LGA'], 'dest'))
-      .addDataset('TOP 10', getValues(airports['LGA'], 'count'))
+      .addDataset('LGA Flights 2013', getValues(airports['LGA'], 'count'), {
+        backgroundColor: backgroundColors,
+      })
       .toggleProgressBar()
       .build();
 
     topDestinationsJfkChart
       .setLabels(getValues(airports['JFK'], 'dest'))
-      .addDataset('TOP 10', getValues(airports['JFK'], 'count'))
+      .addDataset('JFK Flights 2013', getValues(airports['JFK'], 'count'), {
+        backgroundColor: backgroundColors,
+      })
       .toggleProgressBar()
       .build();
   })

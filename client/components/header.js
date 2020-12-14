@@ -24,12 +24,12 @@ class Header extends HTMLElement {
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html"
+                <a class="nav-link" aria-current="page" href="index.html"
                   >Home</a
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="flights.html"
+                <a class="nav-link" aria-current="page" href="flights.html"
                   >Flights</a
                 >
               </li>
