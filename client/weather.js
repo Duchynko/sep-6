@@ -84,7 +84,7 @@ function calculateMeanTemprature(data) {
     holder += parseFloat(temprature);
     i++;
     if (i >= 24) {
-      means.push(holder / 24);
+      means.push((holder / 24).toFixed(2));
       i = 0;
       holder = 0;
     }
