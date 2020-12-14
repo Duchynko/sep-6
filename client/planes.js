@@ -1,11 +1,7 @@
 import ChartBuilder from './chartBuilder.js';
 
-const URL = 'http://localhost:7071/api/Planes';
-// const URL = 'https://sep6api.azurewebsites.net/api/Planes';
-
-const manufaturers200PlusPlanesChart = new ChartBuilder(
-    document.getElementById('manufaturers200PlusPlanes')
-).setType('pie').toggleProgressBar();
+// const URL = 'http://localhost:7071/api/Planes';
+const URL = 'https://sep6api.azurewebsites.net/api/Planes';
 
 const airbusModelPlanesChart = new ChartBuilder(
     document.getElementById('airbusModelPlanes')
@@ -20,10 +16,16 @@ fetch(URL)
         return response.json();
     })
     .then(({ manufaturers200PlusPlanes, airbusModelPlanes, flightsManufacturers200PlusPlanes }) => {
-        manufaturers200PlusPlanesChart
-            .setLabels(getValues(manufaturers200PlusPlanes, 'manufacturer'))
-            .toggleProgressBar()
-            .build();
+
+        let ul = document.createElement('ul');
+        document.getElementById('manufaturers200PlusPlanes').appendChild(ul);
+
+        manufaturers200PlusPlanes.forEach(function (item) {
+            let li = document.createElement('li');
+            ul.appendChild(li);
+
+            li.innerHTML += item.manufacturer;
+        });
 
         airbusModelPlanesChart
             .setLabels(getValues(airbusModelPlanes, 'model'))

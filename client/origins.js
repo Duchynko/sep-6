@@ -1,7 +1,7 @@
 import ChartBuilder from './chartBuilder.js';
 
-const URL = 'http://localhost:7071/api/Origins';
-// const URL = 'https://sep6api.azurewebsites.net/api/Origins';
+// const URL = 'http://localhost:7071/api/Origins';
+const URL = 'https://sep6api.azurewebsites.net/api/Origins';
 
 const meanAirTimeChart = new ChartBuilder(
   document.getElementById('originMeanAirTime')
@@ -10,7 +10,6 @@ const meanAirTimeChart = new ChartBuilder(
 const meanDepartureAndArrivalDelayChart = new ChartBuilder(
   document.getElementById('originMeanDepartureAndArrivalDelay')
 ).toggleProgressBar();
-
 
 fetch(URL)
   .then((response) => {
