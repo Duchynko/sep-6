@@ -11,17 +11,41 @@ const observationChart = new ChartBuilder(
   .setLabels(origins)
   .toggleProgressBar();
 
+  const observationChart = new ChartBuilder(
+    document.getElementById('observation')
+  )
+    .setLabels(origins)
+    .toggleProgressBar();
+
+    const temperatureChart = new ChartBuilder(
+      document.getElementById('temperature')
+    )
+    .setType("line")
+    .setLabels(origins)
+    .toggleProgressBar();
+
 fetch(URL)
   .then((response) => {
     return response.json();
   })
   .then(({ observations, temperature }) => {
     const obs = Object.values(observations);
+    const temp = Object.values(temperature);
 
     observationChart
-      .addDataset('Observations', obs)
+      .addDataset('EWR', obs['EWR'])
+      .addDataset('LGA', obs['LGA'])
+      .addDataset('JFK', obs['JFK'])
       .toggleProgressBar()
       .build();
+
+      temperatureChart
+      .addDataset('EWR', temp['EWR'])
+      .addDataset('LGA', temp['LGA'])
+      .addDataset('JFK', temp['JFK'])
+      .toggleProgressBar()
+      .build();
+
   })
   .catch((err) => {
     console.log('Error:', err);
