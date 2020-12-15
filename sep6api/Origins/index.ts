@@ -15,7 +15,7 @@ const httpTrigger: AzureFunction = async function (
   try {
     const pool = new Pool({
       connectionString: process.env.PG_CONNECTION_STRING,
-      max: 3
+      max: 3,
     });
 
     const client = await pool.connect();
@@ -25,7 +25,7 @@ const httpTrigger: AzureFunction = async function (
       client
     );
 
-    client.release()
+    client.release();
 
     context.res = {
       status: 200,
@@ -44,29 +44,22 @@ const httpTrigger: AzureFunction = async function (
 };
 
 async function getOriginMeanAirTime(client: PoolClient) {
-  const data = await client.query(
-    `SELECT  
-            origin,
-            AVG(CAST (air_time AS INTEGER)) AS "MEAN AIR TIME" 
-        FROM public.flights
-        WHERE 
-            air_time != 'NA'
-        GROUP BY origin`
-  );
+  const data = await client.query(`
+    SELECT origin, AVG(CAST (air_time AS INTEGER)) AS "meanAirTime" 
+      FROM public.flights
+    WHERE air_time != 'NA' GROUP BY origin
+    `);
   return data.rows;
 }
 
 async function getOriginMeanDepartureAndArrivalDelay(client: PoolClient) {
-  const data = await client.query(
-    `SELECT  
-            origin,
-            AVG(CAST (dep_delay AS INTEGER)) AS "MEAN DEP DELAY",
-            AVG(CAST (arr_delay AS INTEGER)) AS "MEAN ARR DELAY"
+  const data = await client.query(`
+    SELECT origin, AVG(CAST (dep_delay AS INTEGER)) AS "meanDepartureDelay",
+      AVG(CAST (arr_delay AS INTEGER)) AS "meanArrivalDelay"
         FROM public.flights
-        WHERE 
-            dep_delay != 'NA' AND arr_delay != 'NA'
-        GROUP BY origin`
-  );
+    WHERE dep_delay != 'NA' AND arr_delay != 'NA'
+    GROUP BY origin
+  `);
   return data.rows;
 }
 

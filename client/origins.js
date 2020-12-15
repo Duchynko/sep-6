@@ -23,23 +23,26 @@ fetch(URL)
   })
   .then(({ originMeanAirTime, originMeanDepartureAndArrivalDelay }) => {
     meanAirTimeChart
-      .setLabels(getValues(originMeanAirTime, 'origin'))
+      .setLabels(getStringValues(originMeanAirTime, 'origin'))
       .addDataset(
         'Mean Air-time 2013',
-        getValues(originMeanAirTime, 'MEAN AIR TIME')
+        getNumberValues(originMeanAirTime, 'meanAirTime')
       )
       .toggleProgressBar()
       .build();
 
     meanDepartureAndArrivalDelayChart
-      .setLabels(getValues(originMeanDepartureAndArrivalDelay, 'origin'))
+      .setLabels(getStringValues(originMeanDepartureAndArrivalDelay, 'origin'))
       .addDataset(
         'Departure delays 2013',
-        getValues(originMeanDepartureAndArrivalDelay, 'MEAN DEP DELAY')
+        getNumberValues(
+          originMeanDepartureAndArrivalDelay,
+          'meanDepartureDelay'
+        )
       )
       .addDataset(
         'Arrival delays 2013',
-        getValues(originMeanDepartureAndArrivalDelay, 'MEAN ARR DELAY')
+        getNumberValues(originMeanDepartureAndArrivalDelay, 'meanArrivalDelay')
       )
       .toggleProgressBar()
       .build();
@@ -48,6 +51,10 @@ fetch(URL)
     console.log('An error occured when fetching data from the API:', err);
   });
 
-function getValues(array, key) {
+function getStringValues(array, key) {
+  return array.map((record) => record[key]);
+}
+
+function getNumberValues(array, key) {
   return array.map((record) => parseFloat(record[key]).toFixed(2));
 }
