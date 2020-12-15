@@ -46,73 +46,59 @@ const httpTrigger: AzureFunction = async function (
 };
 
 async function getManufaturers200PlusPlanes(client: PoolClient) {
-  const data = await client.query(
-    `SELECT manufacturer
-        FROM (
-            SELECT
-                manufacturer,
-                COUNT(tailnum) AS number_of_planes
-            FROM public.planes
-            GROUP BY manufacturer
-            ) AS manufacturerPlaneQty
-        WHERE manufacturerPlaneQty.number_of_planes > 200`
-  );
+  const data = await client.query(`
+    SELECT manufacturer
+      FROM (
+        SELECT manufacturer, COUNT(tailnum) AS number_of_planes
+          FROM public.planes
+        GROUP BY manufacturer
+        ) AS manufacturerPlaneQty
+    WHERE manufacturerPlaneQty.number_of_planes > 200
+  `);
   return data.rows;
 }
 
 async function getAirbusModelPlanes(client: PoolClient) {
-  const data = await client.query(
-    `SELECT  model,
-            COUNT(tailnum) AS number_of_planes,
-            manufacturer
-        FROM public.planes
-        WHERE manufacturer SIMILAR TO '%AIRBUS%'
-        GROUP BY model, manufacturer`
+  const data = await client.query(`
+    SELECT 
+      model, COUNT(tailnum) AS number_of_planes,
+        manufacturer
+      FROM public.planes
+    WHERE manufacturer SIMILAR TO '%AIRBUS%'
+    GROUP BY model, manufacturer`
   );
   return data.rows;
 }
 
 async function getFlightsManufacturers200PlusPlanes(client: PoolClient) {
-  const data = await client.query(
-    `-- total flights of manufactures with 200+ planes
-        SELECT 
-            manufacturer,
-            SUM(flights) AS flights
-        FROM
-        
-            -- total flights of each tailnum from manufacturers with 200+ planes
-            (SELECT
-                public.flights.tailnum,
-                COUNT(id) AS flights
-            FROM public.flights 
-            INNER JOIN
-                -- all tail numbers of manufacturers with 200+ planes
-                (SELECT tailnum
-                FROM public.planes
-                INNER JOIN
-        
-                    -- manufacturers with 200+ planes
-                    (SELECT manufacturer
-                    FROM(
-        
-                        -- manufacturers plane count
-                        SELECT
-                            manufacturer,
-                            COUNT(tailnum) AS number_of_planes
-                        FROM public.planes
-                        GROUP BY manufacturer
-        
-                    ) AS manufacturerPlanes
-                    WHERE manufacturerPlanes.number_of_planes > 200) AS top_manufac
-        
-                ON public.planes.manufacturer = top_manufac.manufacturer) as tailnumbers_top_manufac
-        
-            ON public.flights.tailnum = tailnumbers_top_manufac.tailnum
-            WHERE (public.flights.tailnum != 'NULL')
-            GROUP BY public.flights.tailnum) AS tailnum_NrFlights
-        
-        INNER JOIN public.planes ON tailnum_NrFlights.tailnum = planes.tailnum
-        GROUP BY public.planes.manufacturer`
+  const data = await client.query(`
+    -- total flights of manufactures with 200+ planes
+    SELECT manufacturer, SUM(flights) AS flights
+      FROM (
+        -- total flights of each tailnum from manufacturers with 200+ planes
+        SELECT public.flights.tailnum, COUNT(id) AS flights
+          FROM public.flights 
+        INNER JOIN (
+          -- all tail numbers of manufacturers with 200+ planes
+          SELECT tailnum FROM public.planes
+          INNER JOIN (
+            -- manufacturers with 200+ planes
+            SELECT manufacturer
+              FROM (
+                -- manufacturers plane count
+                SELECT manufacturer, COUNT(tailnum) AS number_of_planes
+                  FROM public.planes
+                GROUP BY manufacturer
+              ) AS manufacturerPlanes
+            WHERE manufacturerPlanes.number_of_planes > 200) AS top_manufac
+              ON public.planes.manufacturer = top_manufac.manufacturer) 
+                as tailnumbers_top_manufac
+          ON public.flights.tailnum = tailnumbers_top_manufac.tailnum
+        WHERE (public.flights.tailnum != 'NULL')
+        GROUP BY public.flights.tailnum) AS tailnum_NrFlights
+        INNER JOIN public.planes 
+          ON tailnum_NrFlights.tailnum = planes.tailnum
+      GROUP BY public.planes.manufacturer`
   );
   return data.rows;
 }

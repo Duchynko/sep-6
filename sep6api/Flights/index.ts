@@ -1,6 +1,13 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { Pool, PoolClient } from "pg";
 
+const airports = ["JFK", "LGA", "EWR"];
+// prettier-ignore
+const months = {
+  january: "1", february: "2", march: "3", april: "4", may: "5", june: "6", july: "7", 
+  august: "8", september: "9", october: "10", november: "11", december: "12",
+};
+
 const httpTrigger: AzureFunction = async function (
   context: Context,
   _: HttpRequest
@@ -42,9 +49,10 @@ async function getTotalFlights(client: PoolClient) {
 
   for (const month in months) {
     data[month] = (
-      await client.query(
-        `SELECT COUNT(*) FROM flights WHERE flights.month = '${months[month]}';`
-      )
+      await client.query(`
+        SELECT COUNT(*) FROM flights 
+        WHERE flights.month = '${months[month]}';
+      `)
     ).rows[0].count;
   }
 
@@ -59,20 +67,15 @@ async function getFlightsPerAirport(client: PoolClient) {
         data[airport] = {};
       }
       data[airport][month] = (
-        await client.query(
-          `SELECT COUNT(*) FROM flights WHERE flights.month = '${months[month]}' AND flights.origin = '${airport}';`
-        )
+        await client.query(`
+          SELECT COUNT(*) FROM flights 
+          WHERE flights.month = '${months[month]}' 
+            AND flights.origin = '${airport}';
+        `)
       ).rows[0].count;
     }
   }
   return data;
 }
-
-const airports = ["JFK", "LGA", "EWR"];
-// prettier-ignore
-const months = {
-  january: "1", february: "2", march: "3", april: "4", may: "5", june: "6", july: "7", 
-  august: "8", september: "9", october: "10", november: "11", december: "12",
-};
 
 export default httpTrigger;

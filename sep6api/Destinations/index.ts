@@ -42,8 +42,12 @@ const httpTrigger: AzureFunction = async function (
 
 async function getTotalData(client: PoolClient) {
   const args = airports.map((a) => "'" + a + "'").join(", ");
-  const response = await client.query(
-    `SELECT COUNT(*), dest FROM flights WHERE origin IN (${args}) GROUP BY dest ORDER BY COUNT(dest) DESC LIMIT 10;`
+  const response = await client.query(`
+    SELECT COUNT(*), dest FROM flights 
+    WHERE origin IN (${args}) 
+    GROUP BY dest 
+    ORDER BY COUNT(dest) DESC 
+    LIMIT 10;`
   );
   return response.rows;
 }
@@ -53,7 +57,11 @@ async function getDataPerAirport(client: PoolClient) {
 
   for (const airport of airports) {
     const response = await client.query(
-      `SELECT COUNT(*), dest FROM flights WHERE origin='${airport}' GROUP BY dest ORDER BY COUNT(dest) DESC LIMIT 10;`
+      `SELECT COUNT(*), dest FROM flights 
+      WHERE origin='${airport}' 
+      GROUP BY dest 
+      ORDER BY COUNT(dest) DESC 
+      LIMIT 10;`
     );
     data[airport] = response.rows;
   }
