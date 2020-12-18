@@ -16,7 +16,7 @@ const httpTrigger: AzureFunction = async function (
   try {
     const pool = new Pool({
       connectionString: process.env.PG_CONNECTION_STRING,
-      max: 3
+      max: 1
     });
 
     const client = await pool.connect();

@@ -17,39 +17,41 @@ const httpTrigger: AzureFunction = async function (
   try {
     const pool = new Pool({
       connectionString: process.env.PG_CONNECTION_STRING,
-      max: 3
+      max: 1,
     });
-    const client = await pool.connect();
-
+    
     const data = {
       total: {},
       airports: {},
     };
 
-    data.total = await getTotalFlights(client);
-    data.airports = await getFlightsPerAirport(client);
+    data.total = await getTotalFlights(pool);
+    data.airports = await getFlightsPerAirport(pool);
 
-    client.release()
+    pool.end()
 
     context.res = {
       status: 200,
-      body: data
+      body: data,
     };
   } catch (error) {
-    console.error("Unexpected error on idle client. Error:", error);
+    console.error(
+      "Unexpected error when fetching data from the database. Error:",
+      error
+    );
     context.res = {
       status: 500,
-      body: "Unexpected error when connecting to the database.",
+      body: "Unexpected error when fetching data from the database.",
     };
   }
 };
 
-async function getTotalFlights(client: PoolClient) {
+async function getTotalFlights(pool: Pool) {
   const data = {};
 
   for (const month in months) {
     data[month] = (
-      await client.query(`
+      await pool.query(`
         SELECT COUNT(*) FROM flights 
         WHERE flights.month = '${months[month]}';
       `)
@@ -59,7 +61,7 @@ async function getTotalFlights(client: PoolClient) {
   return data;
 }
 
-async function getFlightsPerAirport(client: PoolClient) {
+async function getFlightsPerAirport(pool: Pool) {
   const data = {};
   for (const airport of airports) {
     for (const month in months) {
@@ -67,7 +69,7 @@ async function getFlightsPerAirport(client: PoolClient) {
         data[airport] = {};
       }
       data[airport][month] = (
-        await client.query(`
+        await pool.query(`
           SELECT COUNT(*) FROM flights 
           WHERE flights.month = '${months[month]}' 
             AND flights.origin = '${airport}';
