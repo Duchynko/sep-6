@@ -1,7 +1,7 @@
 export default class ChartBuilder {
   constructor(canvas) {
-    this.chart = undefined;
     this.canvas = canvas;
+    this.progressBar = canvas.parentElement.lastElementChild;
     this.config = {
       type: 'bar',
       data: {
@@ -37,6 +37,7 @@ export default class ChartBuilder {
   }
 
   setType(type) {
+    // Remove scales (Y&X-axes) for pie & doughnut types
     if (type === 'pie' || type === 'doughnut') {
       this.config.options.scales = {};
     }
@@ -109,22 +110,21 @@ export default class ChartBuilder {
     return this;
   }
 
+  // Not really a builder method, but for the sake of simplicity it's included
+  // in the class. Ideally this would be part of a e.g., DecoratedChart class.
   toggleProgressBar() {
-    if (this.canvas.parentElement.lastElementChild.style.display !== 'none') {
-      this.canvas.parentElement.lastElementChild.style.cssText =
-        'display:none !important';
+    if (this.progressBar.style.display !== 'none') {
+      this.progressBar.style.cssText = 'display:none !important';
     } else {
-      this.canvas.parentElement.lastElementChild.style.cssText =
-        'display:flex !important';
-      this.canvas.parentElement.lastElementChild.style.cssText =
+      this.progressBar.style.cssText = 'display:flex !important';
+      this.progressBar.style.cssText =
         'position:absolute; left:0; right:0; top:0; bottom:0;';
     }
     return this;
   }
 
   build() {
-    this.chart = new Chart(this.canvas.getContext('2d'), this.config);
-    return this.chart;
+    return new Chart(this.canvas.getContext('2d'), this.config);
   }
 }
 
